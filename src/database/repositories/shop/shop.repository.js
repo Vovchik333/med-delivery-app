@@ -8,6 +8,10 @@ class ShopRepository extends AbstractRepository {
     getAllWithMedicines() {
         return this.model.find({}).populate('medicines').exec();
     }
+
+    getOneWithMedicines(id) {
+        return this.model.findById(id).populate('medicines').exec();
+    }
 }
 
 export { 
