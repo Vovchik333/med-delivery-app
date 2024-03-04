@@ -6,7 +6,8 @@ const shopSchema = new Schema({
         required: true
     },
     medicines: [{
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'Medicine'
     }],
     updatedAt: {
         type: Date,

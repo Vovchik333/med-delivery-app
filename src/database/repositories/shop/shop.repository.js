@@ -4,6 +4,10 @@ class ShopRepository extends AbstractRepository {
     constructor(model) {
         super(model);
     }
+
+    getAllWithMedicines() {
+        return this.model.find({}).populate('medicines').exec();
+    }
 }
 
 export { 
