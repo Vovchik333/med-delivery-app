@@ -97,5 +97,11 @@
 }
 
 .heart-icon:hover {
-    fill: red;
+    cursor: pointer;
+}
+
+.right-side {
+    min-width: 300px;
+    display: flex;
+    justify-content: space-around;
 }
