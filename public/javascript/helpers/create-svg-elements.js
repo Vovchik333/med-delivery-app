@@ -1,6 +1,6 @@
 import { createElementNS } from "./dom-api.helper.js";
 
-const createHeartIcon = () => {
+const createHeartIcon = (fill) => {
     const pathElement = createElementNS({
         tagName: 'path',
         className: '',
@@ -16,7 +16,7 @@ const createHeartIcon = () => {
         className: 'heart-icon',
         attributes: {
             stroke: 'red',
-            fill: '#ff000078',
+            fill,
             width: '50',
             height: '50',
             viewBox: '0 -2 18 22',
