@@ -5,9 +5,13 @@ const medicineSchema = new Schema({
         type: String,
         required: true
     },
+    isFavorite: {
+        type: Boolean,
+        required: true
+    },
     price: {
         type: Number,
-        required: true
+        default: () => false
     },
     updatedAt: {
         type: Date,
