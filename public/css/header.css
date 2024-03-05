@@ -1,0 +1,16 @@
+.menu {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 20px 30px;
+}
+
+.menu-item {
+    text-decoration: none;
+}
+
+.menu-separator {
+    background-color: black;
+    height: 100%;
+    width: 2px;
+}
