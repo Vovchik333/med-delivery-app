@@ -26,8 +26,8 @@ class AbstractRepository {
     }
 
     deleteById(id) {
-        return this.model.findByIdAndDelete(id).exec();
-    }   
+        return this.model.deleteOne({ _id: id }).exec();
+    }
 
     deleteAll() {
         return this.model.deleteMany({}).exec();
