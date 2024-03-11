@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/shopping-cart.css">
+    <script type="module" src="../javascript/shopping-cart.js"></script>
+    <title>Medicine delivery app</title>
+</head>
+<body>
+    <header>
+        <ul class="menu">
+            <li><a href="/" class="menu-item">Shop</a></li>
+            <li><div class="menu-separator"></div></li>
+            <li><a href="/shopping-cart" class="menu-item">Shopping Cart</a></li>
+        </ul>
+    </header>
+    <main class="main-content">
+        <div class="cart-details">
+            <section class="left-side">
+                <ul class="client-info">
+                    <li class="client-info-row">
+                        <label for="input-name">Name:</label>
+                        <input id="input-name" name="input-name" type="text">
+                    </li>
+                    <li class="client-info-row">
+                        <label for="input-name">Email:</label>
+                        <input id="input-email" name="input-email" type="email">
+                    </li>
+                    <li class="client-info-row">
+                        <label for="input-name">Phone:</label>
+                        <input id="input-phone" name="input-phone" type="tel">
+                    </li>
+                    <li class="client-info-row">
+                        <label for="input-name">Address:</label>
+                        <input id="input-address" name="input-address" type="text">
+                    </li>
+                </ul>
+            </section>
+            <section class="right-side">
+                <div id="cart-items"></div>
+            </section>
+        </div>
+        <div class="total-price-wrapper">
+            <h3>Total price: $<span id="total-price"><strong>0</strong></span></h3>
+            <button type="submit">Submit</button>
+        </div>
+    </main>
+</body>
+</html>

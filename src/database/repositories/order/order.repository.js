@@ -5,6 +5,18 @@ class OrderRepository extends AbstractRepository {
         super(model);
     }
 
+    getAllWithUserAndCart() {
+        return this.model.find({}).populate('user').populate({
+            path: 'shoppingCart',
+            populate: {
+                path: 'items',
+                populate: {
+                  path: 'item'
+                }
+            }
+          }).exec();
+    }
+
     getByIdWithUserAndCart(id) {
         return this.model.findById(id).populate('user').populate({
             path: 'shoppingCart',

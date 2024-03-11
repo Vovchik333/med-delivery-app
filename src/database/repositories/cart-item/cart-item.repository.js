@@ -5,6 +5,10 @@ class CartItemRepository extends AbstractRepository {
         super(model);
     }
 
+    getAllWithItem() {
+        return this.model.find({}).populate('item').exec();
+    }
+
     getByIdWithItem(id) {
         return this.model.findById(id).populate('item').exec();
     }

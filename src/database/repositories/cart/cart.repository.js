@@ -5,6 +5,15 @@ class CartRepository extends AbstractRepository {
         super(model);
     }
 
+    getAllWithItems() {
+        return this.model.find({}).populate({
+            path: 'items',
+            populate: {
+              path: 'item'
+            }
+          }).exec();
+    }
+
     getByIdWithItems(id) {
         return this.model.findById(id).populate({
             path: 'items',
