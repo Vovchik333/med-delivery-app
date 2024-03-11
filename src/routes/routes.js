@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { shopsRoutes } from "./shops/shops.routes.js";
-import { medicineRoutes } from "./medicine/medicine.route.js";
+import { routesV1 } from "./v1/routes.js";
+import { routesV2 } from "./v2/routes.js";
 
 const router = Router();
 
-router.use('/shops', shopsRoutes);
-router.use('/medicines', medicineRoutes);
+router.use('/v1', routesV1);
+router.use('/v2', routesV2);
 
 export {
     router as routes

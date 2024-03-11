@@ -1,8 +1,13 @@
-import { shopRepository } from "../repositories/repositories.js"
+import { cartItemRepository, cartRepository, orderRepository, shopRepository, userRepository } from "../repositories/repositories.js"
 import { createMedicines } from "./add-medicines.js";
 
 const createShops = async () => {
     await shopRepository.deleteAll();
+    await userRepository.deleteAll();
+    await cartRepository.deleteAll();
+    await orderRepository.deleteAll();
+    await cartItemRepository.deleteAll();
+    
     const medicines = await createMedicines();
 
     shopRepository.create({ name: 'HealthHub', medicines });
