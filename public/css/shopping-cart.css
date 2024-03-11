@@ -1,0 +1,50 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+    height: 100%;
+    padding: 20px 30px;
+}
+
+.left-side,
+.right-side {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border: 2px black solid;
+    border-radius: 10px;
+}
+
+.cart-details {
+    display: flex;
+    gap: 30px;
+}
+
+.client-info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    padding: 20px;
+}
+
+.total-price-wrapper {
+    display: flex;
+    gap: 30px;
+    justify-content: end;
+}
+
+.client-info-row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.client-info-row > input {
+    height: 40px;
+    border-radius: 15px;
+    padding: 0 20px;
+}
