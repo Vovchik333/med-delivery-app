@@ -3,11 +3,11 @@ import { Schema, model } from "mongoose";
 const cartItemSchema = new Schema({
     item: {
         type: Schema.Types.ObjectId,
-        ref: 'Medician'
+        ref: 'Medicine'
     },
     quantity: {
         type: Number,
-        required: true
+        default: () => 1
     },
     updatedAt: {
         type: Date,
@@ -16,7 +16,7 @@ const cartItemSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
 });
 
 const cartItemModel = model('CartItem', cartItemSchema, 'cartItems');
