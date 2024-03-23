@@ -30,7 +30,6 @@ class CartRepository extends AbstractRepository {
                 $push: { 
                     items: payload._id
                 },
-                $inc: { totalSum: payload.quantity * payload.item.price },
                 $set: {
                     updatedAt: new Date()
                 }
@@ -42,3 +41,21 @@ class CartRepository extends AbstractRepository {
 export { 
     CartRepository 
 };
+
+
+
+
+// addItem(id, payload) {
+//     return this.model.findByIdAndUpdate(
+//         id, 
+//         { 
+//             $push: { 
+//                 items: payload._id
+//             },
+//             $inc: { totalSum: payload.quantity * payload.item.price },
+//             $set: {
+//                 updatedAt: new Date()
+//             }
+//         }
+//     ).exec();
+// }
