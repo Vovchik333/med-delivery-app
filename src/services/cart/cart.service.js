@@ -1,6 +1,18 @@
 import { HttpCode } from "../../common/enums/http/http-code.enum.js";
+import { UserType } from "../../common/enums/user/user-type.enum.js";
 import { cartRepository } from "../../database/repositories/repositories.js";
 import HttpError from "../../helpers/error/http.error.js";
+
+const findAllCarts = async (token) => {
+    if (token.type !== UserType.ADMIN) {
+        throw new HttpError({
+            status: HttpCode.UNAUTHORIZED, 
+            message: 'Reqular user does not have access to the resource'
+        });
+    }
+
+    return await cartRepository.getAllWithItems();
+}
 
 const findCart = async (id) => {
     const foundCart = await cartRepository.getByIdWithItems(id);
@@ -49,6 +61,7 @@ const deleteCart = async (id) => {
 }
 
 export {
+    findAllCarts,
     findCart,
     createCart,
     updateCart,

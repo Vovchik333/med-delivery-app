@@ -1,65 +1,78 @@
 import { Router } from "express";
-import { orderRepository } from "../../../database/repositories/repositories.js";
+import { HttpCode } from "../../../common/enums/http/http-code.enum.js";
+import * as orderService from "../../../services/order/order.service.js";
+import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-    const foundOrders = await orderRepository.getAllWithUserAndCart();
-    
-    res.send(foundOrders);
-});
+router.get(
+    '/', 
+    authorization, 
+    async (req, res, next) => {
+        try {
+            const { token } = req;
+            const foundOrders = await orderService.findAllOrders(token);
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    const foundOrder = await orderRepository.getByIdWithUserAndCart(id);
-
-    if (!foundOrder) {
-        return res.status(404).send({ message: 'not found.'});
+            res.send(foundOrders);
+        } catch (err) {
+            next(err);
+        }
     }
-    
-    res.send(foundOrder);
-});
+);
 
-router.post('/', async (req, res) => {
-    const orderPayload = req.body;
-    orderPayload.finalSum = orderPayload.shoppingCart.totalSum;
+router.get('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const foundOrder = await orderService.findOrder(id);
 
-    const createdOrder = await orderRepository.create(orderPayload);
-    
-    res.send(createdOrder);
-});
-
-router.patch('/:id', async (req, res) => {
-    const { id } = req.params;
-    const updatedOrder = await orderRepository.updateById(id, req.body);
-
-    if (!updatedOrder) {
-        return res.status(404).send({ message: 'not found.'});
+        res.send(foundOrder);
+    } catch (err) {
+        next(err);
     }
-    
-    res.send(updatedOrder);
 });
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const updatedOrder = await orderRepository.updateById(id, req.body);
-
-    if (!updatedOrder) {
-        return res.status(404).send({ message: 'not found.'});
+router.post('/', async (req, res, next) => {
+    try {
+        const { body } = req;
+        const createdOrder = await orderService.createOrder(body);
+        
+        res.status(HttpCode.CREATED).send(createdOrder);
+    } catch (err) {
+        next(err);
     }
-    
-    res.send(updatedOrder);
 });
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    const deletedOrder = await orderRepository.deleteById(id);
-
-    if (!deletedOrder.deletedCount) {
-        return res.status(404).send({ message: 'not found.'});
+router.patch('/:id', async (req, res, next) => {
+    try {
+        const { params, body } = req;
+        const updatedOrder = await orderService.updateOrder(params.id, body);
+        
+        res.send(updatedOrder);
+    } catch (err) {
+        next(err);
     }
-    
-    res.status(204).send();
+});
+
+router.put('/:id', async (req, res, next) => {
+    try {
+        const { params, body } = req;
+        const updatedOrder = await orderService.updateOrder(params.id, body);
+        
+        res.send(updatedOrder);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await orderService.deleteOrder(id);
+        
+        res.status(HttpCode.NO_CONTENT).send();
+    } catch (err) {
+        next(err);
+    }
 });
 
 export {

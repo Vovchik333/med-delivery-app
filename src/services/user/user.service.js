@@ -1,7 +1,19 @@
 import { HttpCode } from "../../common/enums/http/http-code.enum.js";
+import { UserType } from "../../common/enums/user/user-type.enum.js";
 import { userRepository } from "../../database/repositories/repositories.js";
 import HttpError from "../../helpers/error/http.error.js";
 import { jwtManager } from "../../helpers/jwt/jwt-manager.js";
+
+const findAllUsers = async (token) => {
+    if (token.type !== UserType.ADMIN) {
+        throw new HttpError({
+            status: HttpCode.UNAUTHORIZED, 
+            message: 'Reqular user does not have access to the resource'
+        });
+    }
+
+    return await userRepository.getAll();
+}
 
 const findUser = async (id, token) => {
     if (id !== token.id) {
@@ -71,6 +83,7 @@ const deleteUser = async (id, token) => {
 }
 
 export {
+    findAllUsers,
     findUser,
     createUser,
     updateUser,

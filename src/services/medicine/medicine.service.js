@@ -3,6 +3,10 @@ import { UserType } from "../../common/enums/user/user-type.enum.js";
 import { medicineRepository } from "../../database/repositories/repositories.js";
 import HttpError from "../../helpers/error/http.error.js";
 
+const findAllMedicines = async () => {
+    return await medicineRepository.getAll();
+}
+
 const findMedicine = async (id) => {
     const foundMedicine = await medicineRepository.getById(id);
 
@@ -68,6 +72,7 @@ const deleteMedicine = async (id, token) => {
 }
 
 export {
+    findAllMedicines,
     findMedicine,
     createMedicine,
     updateMedicine,
