@@ -11,9 +11,12 @@ const PORT = process.env.PORT || 8080;
 
 const MONGO_URL = process.env.MONGO_DB_URL || '';
 
+const JWT_SECRET = process.env.JWT_SECRET || '';
+
 export {
     STATIC_PATH,
     HTML_STATIC_PATH,
     PORT,
-    MONGO_URL
+    MONGO_URL,
+    JWT_SECRET
 }

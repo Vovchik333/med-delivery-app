@@ -1,66 +1,78 @@
 import { Router } from "express";
-import { cartItemRepository, cartRepository } from "../../../database/repositories/repositories.js";
+import { HttpCode } from "../../../common/enums/http/http-code.enum.js";
+import * as cartItemService from "../../../services/cart-item/cart-item.service.js";
+import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-    const foundCartItems = await cartItemRepository.getAllWithItem();
-    
-    res.send(foundCartItems);
-});
+router.get(
+    '/', 
+    authorization, 
+    async (req, res, next) => {
+        try {
+            const { token } = req;
+            const foundCartItems = await cartItemService.findAllCartItems(token);
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    const foundCartItem = await cartItemRepository.getByIdWithItem(id);
-
-    if (!foundCartItem) {
-        return res.status(404).send({ message: 'not found.'});
+            res.send(foundCartItems);
+        } catch (err) {
+            next(err);
+        }
     }
-    
-    res.send(foundCartItem);
-});
+);
 
-router.post('/', async (req, res) => {
-    const { cartId, cartItem } = req.body;
-    const createdCartItem = await cartItemRepository.create(cartItem);
-    const { _id, quantity } = createdCartItem
+router.get('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const foundCartItem = await cartItemService.findCartItem(id);
 
-    cartRepository.addItem(cartId, { _id, quantity, item: cartItem.item });
-    
-    res.send(createdCartItem);
-});
-
-router.patch('/:id', async (req, res) => {
-    const { id } = req.params;
-    const updatedCartItem = await cartItemRepository.updateById(id, req.body);
-
-    if (!updatedCartItem) {
-        return res.status(404).send({ message: 'not found.'});
+        res.send(foundCartItem);
+    } catch (err) {
+        next(err);
     }
-    
-    res.send(updatedCartItem);
 });
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const updatedCartItem = await cartItemRepository.updateById(id, req.body);
-
-    if (!updatedCartItem) {
-        return res.status(404).send({ message: 'not found.'});
+router.post('/', async (req, res, next) => {
+    try {
+        const { body } = req;
+        const createdCartItem = await cartItemService.createCartItem(body);
+        
+        res.status(HttpCode.CREATED).send(createdCartItem);
+    } catch (err) {
+        next(err);
     }
-    
-    res.send(updatedCartItem);
 });
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    const deletedCartItem = await cartItemRepository.deleteById(id);
+router.patch('/:id', async (req, res, next) => {
+    try {
+        const { params, body } = req;
+        const updatedCartItem = await cartItemService.updateCartItem(params.id, body);
 
-    if (!deletedCartItem.deletedCount) {
-        return res.status(404).send({ message: 'not found.'});
+        res.send(updatedCartItem);
+    } catch (err) {
+        next(err);
     }
-    
-    res.status(204).send();
+});
+
+router.put('/:id', async (req, res, next) => {
+    try {
+        const { params, body } = req;
+        const updatedCartItem = await cartItemService.updateCartItem(params.id, body);
+
+        res.send(updatedCartItem);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await cartItemService.deleteCartItem(id);
+
+        res.status(HttpCode.NO_CONTENT).send();
+    } catch (err) {
+        next(err);
+    }
 });
 
 export {
