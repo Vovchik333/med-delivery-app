@@ -8,9 +8,11 @@ const findAllShops = async () => {
 }
 
 const findShopWithSortedByPriceMedicines = async (id, query) => {
-    const { 
-        sortByPrice = false
-    } = query;
+    let sortByPrice = false;
+
+    if (query.hasOwnProperty('sortByPrice')) {
+        sortByPrice = query.sortByPrice === 'true';
+    }
 
     const foundShop = await shopRepository.getOneWithMedicines(id);
 
