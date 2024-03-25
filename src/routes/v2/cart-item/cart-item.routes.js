@@ -3,7 +3,6 @@ import { HttpCode } from "../../../common/enums/http/http-code.enum.js";
 import * as cartItemService from "../../../services/cart-item/cart-item.service.js";
 import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
-
 /**
  * @swagger
  * components:
