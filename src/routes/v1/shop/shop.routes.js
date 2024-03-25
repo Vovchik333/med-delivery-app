@@ -1,213 +1,57 @@
 import { Router } from "express";
-import { HttpCode } from "../../../common/enums/http/http-code.enum.js";
-import * as shopService from "../../../services/shop/shop.service.js";
-import { authorization } from "../../../middlewares/auth/auth.middleware.js";
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Shop:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The shop ID
- *           example: 66004d6a26f7b9219d887696
- *         name:
- *           type: string
- *           description: Name of pharmacy (shop)
- *           example: HealthHub
- *         medicines:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Medicine'
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
- * tags:
- *   name: Shops
- *   description: All endpoints for managing shops
- */
+import { shopRepository } from "../../../database/repositories/repositories.js";
 
 const router = Router();
 
-/**
- * @swagger
- * /api/v1/shops/{id}:
- *   get:
- *     summary: Get a shop by id
- *     tags: [Shops]
- *     description: Returns the shop according to the received id or message about error
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: String ID of the shop to retrieve.
- *         schema:
- *           type: string
- *           example: 66004d6a26f7b9219d887696
- *     responses:
- *       200:
- *         description:  Returns a shop
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Shop'
- *       404:
- *         $ref: '#/components/responses/NotFoundError'
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- */
-router.get('/:id', async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const foundShop = await shopService.findShop(id);
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const foundShop = await shopRepository.getOneWithMedicines(id);
 
-        res.send(foundShop);
-    } catch (err) {
-        next(err);
+    if (!foundShop) {
+        return res.status(404).send({ message: 'not found.'});
     }
+
+    res.send(foundShop);
 });
 
-/**
- * @swagger
- * /api/v1/shops:
- *   post:
- *     summary: Create a shop
- *     tags: [Shops]
- *     description: Returns the created shop or message about error
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *              $ref: '#/components/schemas/Shop'
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       201:
- *         description: Returns a shop
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Shop'
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- */
-router.post(
-    '/', 
-    authorization,
-    async (req, res, next) => {
-        try {
-            const { body, token } = req;
-            const createdShop = await shopService.createShop(body, token);
-            
-            res.status(HttpCode.CREATED).send(createdShop);
-        } catch (err) {
-            next(err);
-        }
-    }
-);
+router.post('/', async (req, res) => {
+    const createdShop = await shopRepository.create(req.body);
+    
+    res.send(createdShop);
+});
 
-/**
- * @swagger
- * /api/v1/shops/{id}:
- *   put:
- *     summary: Update a shop by id
- *     tags: [Shops]
- *     description: Returns the updated shop according to the received id or message about error
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The string of the shop ID to be updated.
- *         schema:
- *           type: string
- *           example: 66004d6a26f7b9219d887696
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Shop'
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Returns updated shop
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Shop'
- *       404:
- *         $ref: '#/components/responses/NotFoundError'
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- */
-router.put(
-    '/:id', 
-    authorization,
-    async (req, res, next) => {
-        try {
-            const { params, body, token } = req;
-            const updatedShop = await shopService.updateShop(params.id, body, token);
-            
-            res.send(updatedShop);
-        } catch (err) {
-            next(err);
-        }
-    }
-);
+router.patch('/:id', async (req, res) => {
+    const { id } = req.params;
+    const updatedShop = await shopRepository.updateById(id, req.body);
 
-/**
- * @swagger
- * /api/v1/shops/{id}:
- *   delete:
- *     summary: Delete a shop by id
- *     tags: [Shops]
- *     description: Delete a shop by id and returns status code 204 without body or message about error
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: String ID of the shop to delete.
- *         schema:
- *           type: string
- *           example: 66004d6a26f7b9219d887696
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       204:
- *         description: Returns only status code 204 without body
- *       404:
- *         $ref: '#/components/responses/NotFoundError'
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- */
-router.delete(
-    '/:id', 
-    authorization,
-    async (req, res, next) => {
-        try {
-            const { params, token } = req;
-            await shopService.deleteShop(params.id, token);
-            
-            res.status(HttpCode.NO_CONTENT).send();
-        } catch (err) {
-            next(err);
-        }
+    if (!updatedShop) {
+        return res.status(404).send({ message: 'not found.'});
     }
-);
+    
+    res.send(updatedShop);
+});
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const updatedShop = await shopRepository.updateById(id, req.body);
+
+    if (!updatedShop) {
+        return res.status(404).send({ message: 'not found.'});
+    }
+    
+    res.send(updatedShop);
+});
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedShop = await shopRepository.deleteById(id);
+
+    if (!deletedShop.deletedCount) {
+        return res.status(404).send({ message: 'not found.'});
+    }
+    
+    res.status(204).send();
+});
 
 export {
     router as shopsRoutes

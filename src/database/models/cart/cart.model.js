@@ -6,7 +6,8 @@ const cartSchema = new Schema({
         ref: 'CartItem'
     }],
     totalSum: {
-        type: Number
+        type: Number,
+        required: true
     },
     updatedAt: {
         type: Date,
