@@ -16,14 +16,15 @@ const findAllCarts = async (token) => {
 
 const findCart = async (id) => {
     const foundCart = await cartRepository.getByIdWithItems(id);
-    foundCart.totalSum = foundCart.items.reduce((acc, cur) => acc + (cur.item.price * cur.quantity), 0);
-    
+
     if (!foundCart) {
         throw new HttpError({
             status: HttpCode.NOT_FOUND,
             message: 'not found.'
         });
     }
+    
+    foundCart.totalSum = foundCart.items.reduce((acc, cur) => acc + (cur.item.price * cur.quantity), 0);
 
     return foundCart;
 }
