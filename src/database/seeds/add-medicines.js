@@ -1,7 +1,7 @@
 import { medicineRepository } from "../repositories/repositories.js"
 
 const createMedicines = async () => {
-    await medicineRepository.deleteAll();
+    //await medicineRepository.deleteAll();
 
     const medicationIdentifiers = [
         (await medicineRepository.create({ name: 'Lipitor', price: 9.00, isFavorite: false }))._id,
