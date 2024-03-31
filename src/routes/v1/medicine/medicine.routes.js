@@ -5,39 +5,6 @@ import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Medicine:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The user ID.
- *           example: 66004d6a26f7b9219d887696
- *         name:  
- *           type: string
- *           description: The name of medicine.
- *           example: Lipitor
- *         isFavorite:
- *           type: boolean
- *           description: Is it a favorite medicine
- *           example: true
- *         price:
- *           type: number
- *           description: The price of medicine
- *           example: 9.50
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: Medicines
  *   description: All endpoints for managing medicines
@@ -62,7 +29,7 @@ const router = Router();
  *           example: 66004d6a26f7b9219d887696
  *     responses:
  *       200:
- *         description:  Returns a medicine
+ *         description: Returns a medicine
  *         content:
  *           application/json:
  *             schema:
@@ -93,7 +60,7 @@ router.get('/:id', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/Medicine'
+ *              $ref: '#/components/schemas/MedicineRequestData'
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -124,7 +91,7 @@ router.post(
 /**
  * @swagger
  * /api/v1/medicines/{id}:
- *   put:
+ *   patch:
  *     summary: Update a medicine by id
  *     tags: [Medicines]
  *     description: Returns the updated medicine according to the received id or message about error
@@ -141,7 +108,11 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Medicine'
+ *             type: object
+ *             properties:
+ *               price:
+ *                 type: string
+ *                 example: 9.00
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -156,7 +127,7 @@ router.post(
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.put(
+router.patch(
     '/:id', 
     authorization,
     async (req, res, next) => {

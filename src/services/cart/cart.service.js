@@ -1,6 +1,6 @@
 import { HttpCode } from "../../common/enums/http/http-code.enum.js";
 import { UserType } from "../../common/enums/user/user-type.enum.js";
-import { cartRepository } from "../../database/repositories/repositories.js";
+import { cartItemRepository, cartRepository } from "../../database/repositories/repositories.js";
 import HttpError from "../../helpers/error/http.error.js";
 
 const findAllCarts = async (token) => {
@@ -23,31 +23,17 @@ const findCart = async (id) => {
             message: 'not found.'
         });
     }
-    
-    foundCart.totalSum = foundCart.items.reduce((acc, cur) => acc + (cur.item.price * cur.quantity), 0);
 
     return foundCart;
 }
 
 const createCart = async (payload) => {
+    payload.totalSum = payload.items.reduce((acc, cur) => acc + (cur.item.price * cur.quantity), 0);
     payload.items = payload.items.map(elem => ({ item: elem.item._id, quantity: elem.quantity }));
 
     const createdCart = await cartRepository.create(payload);
     
     return createdCart;
-}
-
-const updateCart = async (id, payload) => {
-    const updatedCart = await cartRepository.updateById(id, payload);
-
-    if (!updatedCart) {
-        throw new HttpError({
-            status: HttpCode.NOT_FOUND,
-            message: 'not found.'
-        });
-    }
-
-    return updatedCart;
 }
 
 const deleteCart = async (id) => {
@@ -59,12 +45,13 @@ const deleteCart = async (id) => {
             message: 'not found.'
         });
     }
+
+    await cartItemRepository.deleteAllByCartId(id);
 }
 
 export {
     findAllCarts,
     findCart,
     createCart,
-    updateCart,
     deleteCart
 }

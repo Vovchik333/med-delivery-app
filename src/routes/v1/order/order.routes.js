@@ -4,31 +4,6 @@ import * as orderService from "../../../services/order/order.service.js";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Order:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The order ID.
- *           example: 66004d6a26f7b9219d887696
- *         user:
- *           $ref: '#/components/schemas/User'
- *         shoppingCart:
- *           $ref: '#/components/schemas/Cart'
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: Orders
  *   description: All endpoints for managing orders
@@ -84,7 +59,7 @@ router.get('/:id', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/Order'
+ *              $ref: '#/components/schemas/OrderRequestData'
  *     responses:
  *       201:
  *         description: Returns a order
@@ -99,48 +74,6 @@ router.post('/', async (req, res, next) => {
         const createdOrder = await orderService.createOrder(body);
         
         res.status(HttpCode.CREATED).send(createdOrder);
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * @swagger
- * /api/v1/orders/{id}:
- *   put:
- *     summary: Update a order by id
- *     tags: [Orders]
- *     description: Returns the updated order according to the received id or message about error
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The string of the order ID to be updated.
- *         schema:
- *           type: string
- *           example: 66004d6a26f7b9219d887696
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Order'
- *     responses:
- *       200:
- *         description: Returns updated order
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Order'
- *       404:
- *         $ref: '#/components/responses/NotFoundError'
- */
-router.put('/:id', async (req, res, next) => {
-    try {
-        const { params, body } = req;
-        const updatedOrder = await orderService.updateOrder(params.id, body);
-        
-        res.send(updatedOrder);
     } catch (err) {
         next(err);
     }

@@ -23,7 +23,7 @@ const findMedicine = async (id) => {
 const createMedicine = async (payload, token) => {
     if (token.type !== UserType.ADMIN) {
         throw new HttpError({
-            status: HttpCode.UNAUTHORIZED, 
+            status: HttpCode.FORBIDDEN, 
             message: 'Reqular user does not have access to the resource'
         });
     }

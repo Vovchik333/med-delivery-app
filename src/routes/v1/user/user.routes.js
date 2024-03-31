@@ -5,80 +5,6 @@ import { HttpCode } from "../../../common/enums/http/http-code.enum.js";
 
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *   responses:
- *     UnauthorizedError:
- *       description: Returns message about unauthorized error
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               error:
- *                 type: String
- *                 description: message about unauthorized error
- *                 example: "Not Authorized"
- *     NotFoundError:
- *       description: Returns message about object not found
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               error:
- *                 type: String
- *                 description: message about error
- *                 example: "not found."
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The user ID
- *           example: 66004d6a26f7b9219d887696
- *         name:
- *           type: string
- *           description: User name
- *           example: Vova
- *         email:
- *           type: string
- *           description: User email address
- *           example: vova234@gmail.com
- *         phone:
- *           type: string
- *           description: User phone number
- *           example: 380975647321
- *         address:
- *           type: string
- *           description: Address of the user's place of residence
- *           example: Naukova Street 34
- *         type:
- *           type: string
- *           description: The user type. It can be "admin" or "regular"
- *           example: admin
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: Users
  *   description: All endpoints for managing users
@@ -142,7 +68,7 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/User'
+ *              $ref: '#/components/schemas/UserRequestData'
  *     responses:
  *       201:
  *         description: Returns a user
@@ -182,7 +108,7 @@ router.post('/', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserRequestData'
  *     security:
  *       - bearerAuth: []
  *     responses:

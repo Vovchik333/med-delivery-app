@@ -5,35 +5,6 @@ import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Shop:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The shop ID
- *           example: 66004d6a26f7b9219d887696
- *         name:
- *           type: string
- *           description: Name of pharmacy (shop)
- *           example: HealthHub
- *         medicines:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Medicine'
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: Shops
  *   description: All endpoints for managing shops
@@ -91,7 +62,7 @@ router.get('/:id', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/Shop'
+ *              $ref: '#/components/schemas/ShopRequestData'
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -122,7 +93,7 @@ router.post(
 /**
  * @swagger
  * /api/v1/shops/{id}:
- *   put:
+ *   patch:
  *     summary: Update a shop by id
  *     tags: [Shops]
  *     description: Returns the updated shop according to the received id or message about error
@@ -139,7 +110,11 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Shop'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: SuperHealth
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -154,7 +129,7 @@ router.post(
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.put(
+router.patch(
     '/:id', 
     authorization,
     async (req, res, next) => {
