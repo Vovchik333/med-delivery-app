@@ -5,35 +5,6 @@ import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Cart:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The user ID.
- *           example: 28004d6a56f7b9212d837683
- *         items:  
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/CartItem'
- *         totalSum:
- *           type: number
- *           description: The user's name.
- *           example: 28.5
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: Carts
  *   description: All endpoints for managing shopping carts
@@ -144,52 +115,6 @@ router.post('/', async (req, res, next) => {
         const createdCart = await cartService.createCart(body);
         
         res.status(HttpCode.CREATED).send(createdCart);
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * @swagger
- * /api/v2/carts/{id}:
- *   patch:
- *     summary: Update a cart by id
- *     tags: [Carts]
- *     description: Returns the updated cart according to the received id
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The string of the cart ID to be updated.
- *         schema:
- *           type: string
- *           example: 66004d6a26f7b9219d887696
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               totalSum: 
- *                 type: number
- *                 example: 9.0001
- *     responses:
- *       200:
- *         description: A shopping cart
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Cart'
- *       404:
- *         $ref: '#/components/responses/NotFoundError'
- */
-router.patch('/:id', async (req, res, next) => {
-    try {
-        const { params, body } = req;
-        const updatedCart = await cartService.updateCart(params.id, body);
-
-        res.send(updatedCart);
     } catch (err) {
         next(err);
     }

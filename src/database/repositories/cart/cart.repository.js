@@ -6,56 +6,71 @@ class CartRepository extends AbstractRepository {
     }
 
     getAllWithItems() {
-        return this.model.find({}).populate({
-            path: 'items',
-            populate: {
-              path: 'item'
-            }
-          }).exec();
+        return this.model
+            .find({})
+            .populate({
+                path: 'items',
+                    populate: {
+                path: 'item'
+                }
+            })
+            .exec();
     }
 
     getByIdWithItems(id) {
-        return this.model.findById(id).populate({
-            path: 'items',
-            populate: {
-              path: 'item'
-            }
-          }).exec();
+        return this.model
+            .findById(id)
+            .populate({
+                path: 'items',
+                populate: {
+                    path: 'item'
+                }
+            })
+            .exec();
     }
 
-    addItem(id, payload) {
-        return this.model.findByIdAndUpdate(
-            id, 
-            { 
-                $push: { 
-                    items: payload._id
-                },
-                $set: {
-                    updatedAt: new Date()
+    incTotalSum(id, price) {
+        return this.model
+            .findByIdAndUpdate(
+                id, 
+                {
+                    $inc: { totalSum: price },
+                    $set: { updatedAt: new Date() }
                 }
-            }
-        ).exec();
+            )
+            .exec();
+    }
+
+    async addItem(payload) {
+        const { _id, cartId, quantity, item: { price } } = payload;
+
+        return await this.model
+            .findByIdAndUpdate(
+                cartId, 
+                { 
+                    $push: { items: _id },
+                    $inc: { totalSum: quantity * price },
+                    $set: { updatedAt: new Date() }
+                }
+            )
+            .exec();
+    }
+
+    async removeItem(payload) {
+        const { _id, cartId, quantity, item: { price } } = payload;
+
+        return await this.model
+            .findByIdAndUpdate(
+                cartId, 
+                {   $pull: { arrayField: { _id } },
+                    $inc: { totalSum: -quantity * price },
+                    $set: { updatedAt: new Date() }
+                }
+            )
+            .exec();
     }
 }
 
 export { 
     CartRepository 
 };
-
-
-
-
-// addItem(id, payload) {
-//     return this.model.findByIdAndUpdate(
-//         id, 
-//         { 
-//             $push: { 
-//                 items: payload._id
-//             },
-//             $inc: { totalSum: payload.quantity * payload.item.price },
-//             $set: {
-//                 updatedAt: new Date()
-//             }
-//         }
-//     ).exec();
-// }

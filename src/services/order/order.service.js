@@ -38,19 +38,6 @@ const createOrder = async (payload) => {
     return createdOrder;
 }
 
-const updateOrder = async (id, payload) => {
-    const updatedOrder = await orderRepository.updateById(id, payload);
-
-    if (!updatedOrder) {
-        throw new HttpError({
-            status: HttpCode.NOT_FOUND,
-            message: 'not found.'
-        });
-    }
-
-    return updatedOrder;
-}
-
 const deleteOrder = async (id) => {
     const deletedOrder = await orderRepository.deleteById(id);
 
@@ -66,6 +53,5 @@ export {
     findAllOrders,
     findOrder,
     createOrder,
-    updateOrder,
     deleteOrder
 }

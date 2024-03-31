@@ -3,6 +3,16 @@ import { JWT_SECRET } from "../../config.js";
 import { HttpCode } from "../../common/enums/http/http-code.enum.js";
 import HttpError from "../error/http.error.js";
 
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
 class JwtManager {
     #secret;
 
