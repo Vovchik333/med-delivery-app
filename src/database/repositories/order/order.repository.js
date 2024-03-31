@@ -6,27 +6,35 @@ class OrderRepository extends AbstractRepository {
     }
 
     getAllWithUserAndCart() {
-        return this.model.find({}).populate('user').populate({
-            path: 'shoppingCart',
-            populate: {
-                path: 'items',
+        return this.model
+            .find({})
+            .populate('user')
+            .populate({
+                path: 'shoppingCart',
                 populate: {
-                  path: 'item'
+                    path: 'items',
+                    populate: {
+                        path: 'item'
+                    }
                 }
-            }
-          }).exec();
+            })
+            .exec();
     }
 
     getByIdWithUserAndCart(id) {
-        return this.model.findById(id).populate('user').populate({
-            path: 'shoppingCart',
-            populate: {
-                path: 'items',
+        return this.model
+            .findById(id)
+            .populate('user')
+            .populate({
+                path: 'shoppingCart',
                 populate: {
-                  path: 'item'
+                    path: 'items',
+                    populate: {
+                        path: 'item'
+                    }
                 }
-            }
-          }).exec();
+            })
+            .exec();
     }
 }
 

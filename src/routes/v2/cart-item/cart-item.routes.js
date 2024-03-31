@@ -5,33 +5,6 @@ import { authorization } from "../../../middlewares/auth/auth.middleware.js";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     CartItem:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: The user ID.
- *           example: 94004b6a26t7c9219a887627
- *         item:
- *           $ref: '#/components/schemas/Medicine'
- *         quantity:
- *           type: integer
- *           description: quantity of items
- *           example: 3
- *         updatedAt:
- *           type: string
- *           description: time of the last update
- *           example: 2024-03-24T15:57:30.439+00:00
- *         createdAt:
- *           type: string
- *           description: creation time
- *           example: 2024-03-24T15:57:30.439+00:00
- */
-
-/**
- * @swagger
  * tags:
  *   name: CartItems
  *   description: All endpoints for managing cart items
@@ -123,13 +96,7 @@ router.get('/:id', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *              type: object
- *              properties:
- *                cartItem:
- *                  $ref: '#/components/schemas/CartItem'
- *                cartId:
- *                  type: string 
- *                  example: 65ff50e03f2149c0c6fbf373
+ *             $ref: '#/components/schemas/CartItemRequestData'
  *     responses:
  *       201:
  *         description: Returns a shopping cart item
@@ -152,7 +119,7 @@ router.post('/', async (req, res, next) => {
 /**
  * @swagger
  * /api/v2/cart-items/{id}:
- *   patch:
+ *   put:
  *     summary: Update a cart item by id
  *     tags: [CartItems]
  *     description: Returns the updated cart item according to the received id or message about error
@@ -169,11 +136,7 @@ router.post('/', async (req, res, next) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               quantity: 
- *                 type: integer
- *                 example: 2
+ *             $ref: '#/components/schemas/CartItemRequestData'
  *     responses:
  *       200:
  *         description: Returns updated cart item
@@ -184,7 +147,7 @@ router.post('/', async (req, res, next) => {
  *       404:
  *         $ref: '#/components/responses/NotFoundError'
  */
-router.patch('/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
     try {
         const { params, body } = req;
         const updatedCartItem = await cartItemService.updateCartItem(params.id, body);

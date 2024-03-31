@@ -4,15 +4,20 @@ class AbstractRepository {
     }
 
     getAll() {
-        return this.model.find({}).exec();
+        return this.model
+            .find({})
+            .exec();
     }
 
     getById(id) {
-        return this.model.findById(id).exec();
+        return this.model
+            .findById(id)
+            .exec();
     }
 
     create(payload) {
-        return this.model.create(payload);
+        return this.model
+            .create(payload);
     }
 
     async updateById(id, payload) {
@@ -22,15 +27,25 @@ class AbstractRepository {
             new: true
         }
 
-        return await this.model.findByIdAndUpdate(id, { ...payload }, options).exec();
+        return await this.model
+            .findByIdAndUpdate(
+                id, 
+                { ...payload }, 
+                options
+            )
+            .exec();
     }
 
     deleteById(id) {
-        return this.model.deleteOne({ _id: id }).exec();
+        return this.model
+            .deleteOne({ _id: id })
+            .exec();
     }
 
     deleteAll() {
-        return this.model.deleteMany({}).exec();
+        return this.model
+            .deleteMany({})
+            .exec();
     }   
 }
 
