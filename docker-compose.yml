@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  account:
+    build: 
+      context: account
+      dockerfile: ./Dockerfile
+    command: npm start
+    ports:
+      - '8081:8081'
+
+  med_delivery:
+    build: 
+      context: med-delivery
+      dockerfile: ./Dockerfile
+    command: npm start
+    ports:
+      - '8080:8080'
