@@ -1,22 +1,23 @@
 import mongoose from 'mongoose';
 import { MONGO_URL } from '../config/config.js';
+import { logger } from '../helpers/logging/logger.js';
 
 export const connectToDB = async () => {
     mongoose.connection.on('connected', () => {
-        console.log('MongoDB successfully connected');
+        logger.info('MongoDB successfully connected');
     });
 
     mongoose.connection.on('error', (error) => {
-        console.log(error);
+        logger.error(error);
     });
 
     mongoose.connection.on('disconnected', () => {
-        console.log('MongoDB connection is disconnected');
+        logger.info('MongoDB connection is disconnected');
     });
 
     process.on('SIGINT', () => {
         mongoose.connection.close();
-        console.log('MongoDB connection disconnected through app termination');
+        logger.info('MongoDB connection disconnected through app termination');
         process.exit(0);
     });
 
